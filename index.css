@@ -20,19 +20,31 @@
 ╰a┈b┈c┈d┈e┈f┈g┈h┈╯
 */
 /* This is for emojis */
-#whiteKing::before { content: '♔'; }
-#whiteQueen::before { content: '♕'; }
-#whiteRook::before { content: '♖'; }
-#whiteKnight::before { content: '♘'; }
-#whiteBishop::before { content: '♗'; }
-#whitePawn::before { content: '♙'; }
-#blackKing::before { content: '♚'; }
-#blackQueen::before { content: '♛'; }
-#blackRook::before { content: '♜'; }
-#blackKnight::before { content: '♞'; }
-#blackBishop::before { content: '♝'; }
-#blackPawn::before { content: '♟'; }
+/*#whiteKing::before { content: '♔'; }*/
+/*#whiteQueen::before { content: '♕'; }*/
+/*#whiteRook::before { content: '♖'; }*/
+/*#whiteKnight::before { content: '♘'; }*/
+/*#whiteBishop::before { content: '♗'; }*/
+/*#whitePawn::before { content: '♙'; }*/
+/*#blackKing::before { content: '♚'; }*/
+/*#blackQueen::before { content: '♛'; }*/
+/*#blackRook::before { content: '♜'; }*/
+/*#blackKnight::before { content: '♞'; }*/
+/*#blackBishop::before { content: '♝'; }*/
+/*#blackPawn::before { content: '♟'; }*/
 
+#whiteKing::before { content: 'K'; }
+#whiteQueen::before { content: 'Q'; }
+#whiteRook::before { content: 'R'; }
+#whiteKnight::before { content: 'N'; }
+#whiteBishop::before { content: 'B'; }
+#whitePawn::before { content: 'P'; }
+#blackKing::before { content: 'K'; }
+#blackQueen::before { content: 'Q'; }
+#blackRook::before { content: 'R'; }
+#blackKnight::before { content: 'N'; }
+#blackBishop::before { content: 'B'; }
+#blackPawn::before { content: 'P'; }
 
 /* This is for design */
 #chess-board {
