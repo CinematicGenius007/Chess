@@ -69,7 +69,7 @@ let castle = {
 };
 
 function checkTurn(el) {
-    return !!(el.id.match('^white.*') && turn === TYPE.WHITE || el.id.match('^black.*') && turn === TYPE.BLACK);
+    return (el.id.match('^white.*') && turn === TYPE.WHITE || el.id.match('^black.*') && turn === TYPE.BLACK);
 
 }
 
@@ -110,7 +110,8 @@ function move(el, i) {
                     break;
                 case 'whiteQueen':
                 case 'blackQueen':
-                    queen(i);
+                    rook(i);
+                    bishop(i);
                     break;
                 case 'whiteKnight':
                 case 'blackKnight':
@@ -214,8 +215,9 @@ function queen(i) {}
 
 function bishop(i) {
     const edgeCase = (position) => (position % 8 === 0 || (position + 1) % 8 === 0);
-    for (let pos = i + 9; pos < 64; pos += 9) {
-        if (pieces.includes(chessPieces[pos].id))
+    let pos;
+    for (pos = i + 9; pos < 64; pos += 9) {
+        if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
             if (!checkTurn(chessPieces[pos]))
@@ -226,8 +228,8 @@ function bishop(i) {
             break;
     }
 
-    for (let pos = i - 9; pos >= 0; pos -= 9) {
-        if (pieces.includes(chessPieces[pos].id))
+    for (pos = i - 9; pos >= 0; pos -= 9) {
+        if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
             if (!checkTurn(chessPieces[pos]))
@@ -238,8 +240,8 @@ function bishop(i) {
             break;
     }
 
-    for (let pos = i + 7; pos < 64; i += 7) {
-        if (pieces.includes(chessPieces[pos].id))
+    for (pos = i + 7; pos < 64; i += 7) {
+        if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
             if (!checkTurn(chessPieces[pos]))
@@ -250,8 +252,8 @@ function bishop(i) {
             break;
     }
 
-    for (let pos = i - 7; pos >= 0; i -= 7) {
-        if (pieces.includes(chessPieces[pos].id))
+    for (pos = i - 7; pos >= 0; i -= 7) {
+        if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
             if (!checkTurn(chessPieces[pos]))
@@ -265,8 +267,29 @@ function bishop(i) {
 }
 
 function rook(i) {
-    for (let pos = i + 8; pos < 64; pos += 8) {
-        if (pieces.includes(chessPieces[pos].id))
+    let pos;
+    for (pos = i + 8; pos < 64; pos += 8) {
+        if (chessPieces[pos].id === '') {
+            possibleMoves.push(pos);
+        } else {
+            if (!checkTurn(chessPieces[pos]))
+                possibleHits.push(pos);
+            break;
+        }
+    }
+
+    for (pos = i - 8; pos >= 0; pos -= 8) {
+        if (chessPieces[pos].id === '') {
+            possibleMoves.push(pos);
+        } else {
+            if (!checkTurn(chessPieces[pos]))
+                possibleHits.push(pos);
+            break;
+        }
+    }
+
+    for (pos = i + 1; pos < Math.ceil((i + 1) / 8) * 8; i++) {
+        if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
             if (!checkTurn(chessPieces[pos]))
@@ -275,28 +298,8 @@ function rook(i) {
         }
     }
 
-    for (let pos = i - 8; pos >= 0; pos -= 8) {
-        if (pieces.includes(chessPieces[pos].id))
-            possibleMoves.push(pos);
-        else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
-            break;
-        }
-    }
-
-    for (let pos = i + 1; pos < Math.ceil((i + 1) / 8) * 8; i++) {
-        if (pieces.includes(chessPieces[pos].id))
-            possibleMoves.push(pos);
-        else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
-            break;
-        }
-    }
-
-    for (let pos = i - 1; pos >= Math.floor(i / 8) * 8; i--) {
-        if (pieces.includes(chessPieces[pos].id))
+    for (pos = i - 1; pos >= Math.floor(i / 8) * 8; i--) {
+        if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
             if (!checkTurn(chessPieces[pos]))
