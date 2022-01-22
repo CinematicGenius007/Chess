@@ -240,7 +240,7 @@ function bishop(i) {
             break;
     }
 
-    for (pos = i + 7; pos < 64; i += 7) {
+    for (pos = i + 7; pos < 64; pos += 7) {
         if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
@@ -252,7 +252,7 @@ function bishop(i) {
             break;
     }
 
-    for (pos = i - 7; pos >= 0; i -= 7) {
+    for (pos = i - 7; pos >= 0; pos -= 7) {
         if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
@@ -288,7 +288,7 @@ function rook(i) {
         }
     }
 
-    for (pos = i + 1; pos < Math.ceil((i + 1) / 8) * 8; i++) {
+    for (pos = i + 1; pos < Math.ceil((i + 1) / 8) * 8; pos++) {
         if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
@@ -298,7 +298,7 @@ function rook(i) {
         }
     }
 
-    for (pos = i - 1; pos >= Math.floor(i / 8) * 8; i--) {
+    for (pos = i - 1; pos >= Math.floor(i / 8) * 8; pos--) {
         if (chessPieces[pos].id === '')
             possibleMoves.push(pos);
         else {
