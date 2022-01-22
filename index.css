@@ -43,3 +43,7 @@
 .chess-piece-in-danger {
     box-shadow: inset  0 0 1px 2px #ff0000;
 }
+
+.chess-piece-possible-moves {
+    box-shadow: inset  0 0 1px 2px #00ffd1;
+}
