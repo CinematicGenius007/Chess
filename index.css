@@ -1,0 +1,45 @@
+#chess-board {
+    height: 560px;
+    width: 560px;
+    display: flex;
+    flex-wrap: wrap;
+    border: 20px solid brown;
+}
+
+.chess-tile-1:nth-child(2n + 1) {
+    background: white;
+}
+
+.chess-tile-1:nth-child(2n) {
+    background: darkslategray;
+}
+
+.chess-tile-2:nth-child(2n) {
+    background: white;
+}
+
+.chess-tile-2:nth-child(2n + 1) {
+    background: darkslategray;
+}
+
+.chess-piece {
+    height: 70px;
+    width: 70px;
+    font-size: 3.2rem;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.chess-piece-selected {
+    box-shadow: inset 0 0 1px 2px #14ff32;
+}
+
+.chess-piece-in-danger {
+    box-shadow: inset  0 0 1px 2px #ff0000;
+}
