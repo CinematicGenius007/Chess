@@ -70,8 +70,14 @@ let castle = {
 
 function checkTurn(el) {
     return (el.id.match('^white.*') && turn === TYPE.WHITE || el.id.match('^black.*') && turn === TYPE.BLACK);
-
 }
+
+const checkPossibleMove = (index) => {
+    if (index >= 0 && index < 64) {
+        if (chessPieces[index].id === '') possibleMoves.push(index);
+        else if (!checkTurn(chessPieces[index])) possibleHits.push(index);
+    }
+};
 
 // Possible scenarios
 // 1. When no other pieces is selected.
@@ -81,7 +87,7 @@ function checkTurn(el) {
 //    c. they try to select any other thing, their own piece or a blank piece.
 
 function move(el, i) {
-    console.log(el, i, possibleMoves, possibleHits, selected_index)
+    // console.log(el, i, possibleMoves, possibleHits, selected_index);
     let pieceVal = el.id;
     if (possibleMoves.includes(i) || possibleHits.includes(i)) {
         turn = turn === TYPE.WHITE ? TYPE.BLACK : TYPE.WHITE;
@@ -153,163 +159,154 @@ function freePossibleHighlights() {
 function pawn(i) {
     if (turn === TYPE.BLACK) {
         // check for 2 moves or 1 move // [8 -> 16, 24 -> 17], [16, 24, -1, 17]
-        if (i < 8)
-            return;
+        if (i < 8) return;
         if (i >= 48 && i < 56) {
             possibleMoves.push(i - 8, i - 16);
-            if (pieces.includes(chessPieces[i - 16].id))
-                possibleMoves.pop();
-        } else if (i > 7)
-            possibleMoves.push(i - 8);
+            if (pieces.includes(chessPieces[i - 16].id)) possibleMoves.pop();
+        } else if (i > 7) possibleMoves.push(i - 8);
         // If something is obstructing the pawn
-        if (pieces.includes(chessPieces[i - 8].id))
-            possibleMoves.splice(0, possibleMoves.length);
+        if (pieces.includes(chessPieces[i - 8].id)) possibleMoves.splice(0, possibleMoves.length);
         // possible hits
         if (i % 8 === 0) {
-            if (chessPieces[i - 7].id.match('^white.*'))
-                possibleHits.push(i - 7);
+            if (chessPieces[i - 7].id.match('^white.*')) possibleHits.push(i - 7);
         } else if ((i + 1) % 8 === 0) {
-            if (chessPieces[i - 9].id.match('^white.*'))
-                possibleHits.push(i - 9);
+            if (chessPieces[i - 9].id.match('^white.*')) possibleHits.push(i - 9);
         } else {
-            if (chessPieces[i - 7].id.match('^white.*'))
-                possibleHits.push(i - 7);
-            if (chessPieces[i - 9].id.match('^white.*'))
-                possibleHits.push(i - 9);
+            if (chessPieces[i - 7].id.match('^white.*')) possibleHits.push(i - 7);
+            if (chessPieces[i - 9].id.match('^white.*')) possibleHits.push(i - 9);
         }
 
     } else {
-        if (i >= 56)
-            return;
+        if (i >= 56) return;
         if (i >= 8 && i < 16) {
             possibleMoves.push(i + 8, i + 16);
-            if (pieces.includes(chessPieces[i + 16].id))
-                possibleMoves.pop();
-        } else if (i < 56)
-            possibleMoves.push(i + 8);
+            if (pieces.includes(chessPieces[i + 16].id)) possibleMoves.pop();
+        } else if (i < 56) possibleMoves.push(i + 8);
         // for pawn obstruction
-        if (pieces.includes(chessPieces[i + 8].id))
-            possibleMoves.splice(0, possibleMoves.length);
+        if (pieces.includes(chessPieces[i + 8].id)) possibleMoves.splice(0, possibleMoves.length);
         // possible hits
         if (i % 8 === 0) {
-            if (chessPieces[i + 9].id.match('^black.*'))
-                possibleHits.push(i + 9);
+            if (chessPieces[i + 9].id.match('^black.*')) possibleHits.push(i + 9);
         } else if ((i + 1) % 8 === 0) {
-            if (chessPieces[i + 7].id.match('^black.*'))
-                possibleHits.push(i + 7);
+            if (chessPieces[i + 7].id.match('^black.*')) possibleHits.push(i + 7);
         } else {
-            if (chessPieces[i + 7].id.match('^black.*'))
-                possibleHits.push(i + 7);
-            if (chessPieces[i + 9].id.match('^black.*'))
-                possibleHits.push(i + 9);
+            if (chessPieces[i + 7].id.match('^black.*')) possibleHits.push(i + 7);
+            if (chessPieces[i + 9].id.match('^black.*')) possibleHits.push(i + 9);
         }
     }
     highlight_possible_moves();
 }
 
 function king(i) {
+    if (i % 8 !== 0) checkPossibleMove(i - 1);
+    if (i % 8 !== 0 && i >= 8) checkPossibleMove(i - 9);
+    if (i % 8 !== 0 && i < 56) checkPossibleMove(i + 7);
+    if ((i + 1) % 8 !== 0) checkPossibleMove(i + 1);
+    if ((i + 1) % 8 !== 0 && i >= 8) checkPossibleMove(i - 7);
+    if ((i + 1) % 8 !== 0 && i < 56) checkPossibleMove(i + 9);
+    if (i < 56) checkPossibleMove(i + 8);
+    if (i >= 8) checkPossibleMove(i - 8);
 
+    highlight_possible_moves()
 }
 
-function queen(i) {}
-
 function bishop(i) {
-    const edgeCase = (position) => (position % 8 === 0 || (position + 1) % 8 === 0);
+    const edgeCase = (a, b) => ((a % 8 === 0 && (b + 1) % 8 === 0) || (b % 8 === 0 && (a + 1) % 8 === 0));
     let pos;
-    for (pos = i + 9; pos < 64; pos += 9) {
-        if (chessPieces[pos].id === '')
-            possibleMoves.push(pos);
+    for (pos = i + 9; pos < 64 && !edgeCase(pos - 9, pos); pos += 9) {
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
         else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
-        if (edgeCase(pos))
-            break;
     }
 
-    for (pos = i - 9; pos >= 0; pos -= 9) {
-        if (chessPieces[pos].id === '')
-            possibleMoves.push(pos);
+    for (pos = i - 9; pos >= 0 && !edgeCase(pos + 9, pos); pos -= 9) {
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
         else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
-        if (edgeCase(pos))
-            break;
     }
 
-    for (pos = i + 7; pos < 64; pos += 7) {
-        if (chessPieces[pos].id === '')
-            possibleMoves.push(pos);
+    for (pos = i + 7; pos < 64 && !edgeCase(pos - 7, pos); pos += 7) {
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
         else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
-        if (edgeCase(pos))
-            break;
     }
 
-    for (pos = i - 7; pos >= 0; pos -= 7) {
-        if (chessPieces[pos].id === '')
-            possibleMoves.push(pos);
+    for (pos = i - 7; pos >= 0 && !edgeCase(pos + 7, pos); pos -= 7) {
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
         else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
-        if (edgeCase(pos))
-            break;
     }
     highlight_possible_moves();
 }
 
-function rook(i) {
+function rook(i) { // 32
     let pos;
     for (pos = i + 8; pos < 64; pos += 8) {
-        if (chessPieces[pos].id === '') {
-            possibleMoves.push(pos);
-        } else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
+        else {
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
     }
 
     for (pos = i - 8; pos >= 0; pos -= 8) {
-        if (chessPieces[pos].id === '') {
-            possibleMoves.push(pos);
-        } else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
+        else {
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
     }
 
     for (pos = i + 1; pos < Math.ceil((i + 1) / 8) * 8; pos++) {
-        if (chessPieces[pos].id === '')
-            possibleMoves.push(pos);
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
         else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
     }
 
     for (pos = i - 1; pos >= Math.floor(i / 8) * 8; pos--) {
-        if (chessPieces[pos].id === '')
-            possibleMoves.push(pos);
+        if (chessPieces[pos].id === '') possibleMoves.push(pos);
         else {
-            if (!checkTurn(chessPieces[pos]))
-                possibleHits.push(pos);
+            if (!checkTurn(chessPieces[pos])) possibleHits.push(pos);
             break;
         }
     }
+
     highlight_possible_moves();
 }
 
 
 // no obstruction
-function knight(i) {}
+function knight(i) {
+    // moving left
+    if (!(i % 8 === 0 || (i - 1) % 8 === 0)) {
+        if (i - 10 >= 8) checkPossibleMove(i - 10);
+        if (i + 6 < 62) checkPossibleMove(i + 6);
+    }
+    // moving right
+    if (!((i + 1) % 8 === 0 || (i + 2) % 8 === 0)) {
+        if (i - 6 > 1) checkPossibleMove(i - 6);
+        if (i + 10 < 64) checkPossibleMove(i + 10);
+    }
+    // moving up
+    if (i < 48) {
+        if (i % 8 !== 0) checkPossibleMove(i + 15);
+        if ((i + 1) % 8 !== 0) checkPossibleMove(i + 17);
+    }
+    // moving down
+    if (i >= 16) {
+        if (i % 8 !== 0) checkPossibleMove(i - 17);
+        if ((i + 1) % 8 !== 0) checkPossibleMove(i - 15);
+    }
+
+    highlight_possible_moves();
+}
