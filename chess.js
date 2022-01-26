@@ -1,6 +1,9 @@
 // Matrix - 8 x 8
 let chessPieces = document.querySelectorAll('.chess-piece');
 
+chessPieces.forEach((piece, i) => {
+    piece.addEventListener("click", () => move(piece, i));
+});
 for (let i = 0; i < 64; i++) {
     chessPieces[i].addEventListener("click", () => {
         move(chessPieces[i], i);
@@ -9,21 +12,6 @@ for (let i = 0; i < 64; i++) {
 
 const pieces = ['whiteKing', 'whiteQueen', 'whiteRook', 'whiteBishop', 'whiteKnight', 'whitePawn',
     'blackKing', 'blackQueen', 'blackRook', 'blackBishop', 'blackKnight', 'blackPawn'];
-
-// const pieces = {
-//     whiteKing: '♔',
-//     whiteQueen: '♕',
-//     whiteRook: '♖',
-//     whiteBishop: '♗',
-//     whiteKnight: '♘',
-//     whitePawn: '♙',
-//     blackKing: '♔',
-//     blackQueen: '♕',
-//     blackRook: '♜',
-//     blackBishop: '♝',
-//     blackKnight: '♞',
-//     blackPawn: '♟'
-// }
 
 const TYPE = {
     WHITE: 'white',
@@ -64,8 +52,14 @@ let possibleMoves = [];
 let possibleHits = [];
 let turn = TYPE.WHITE;
 let castle = {
-    black: 0,
-    white: 0
+    black: {
+        left: 0,
+        right: 0
+    },
+    white: {
+        left: 0,
+        right: 0
+    }
 };
 
 function checkTurn(el) {
