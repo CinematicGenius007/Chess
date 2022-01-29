@@ -1,9 +1,6 @@
 // Matrix - 8 x 8
 let chessPieces = document.querySelectorAll('.chess-piece');
 
-chessPieces.forEach((piece, i) => {
-    piece.addEventListener("click", () => move(piece, i));
-});
 for (let i = 0; i < 64; i++) {
     chessPieces[i].addEventListener("click", () => {
         move(chessPieces[i], i);
@@ -51,6 +48,7 @@ let selected_index = -1;
 let possibleMoves = [];
 let possibleHits = [];
 let turn = TYPE.WHITE;
+
 let castle = {
     black: {
         left: 0,
@@ -131,6 +129,7 @@ function move(el, i) {
 }
 
 function highlight_possible_moves() {
+    // console.log(possibleMoves, possibleHits);
     for (let k of possibleMoves)
         chessPieces[k].classList.add('chess-piece-possible-moves');
     for (let k of possibleHits)
@@ -138,6 +137,7 @@ function highlight_possible_moves() {
 }
 
 function freePossibleHighlights() {
+    // console.log('called!')
     if (selected_index !== -1) {
         chessPieces[selected_index].classList.remove('chess-piece-selected');
         selected_index = -1;
@@ -188,6 +188,7 @@ function pawn(i) {
             if (chessPieces[i + 9].id.match('^black.*')) possibleHits.push(i + 9);
         }
     }
+
     highlight_possible_moves();
 }
 
