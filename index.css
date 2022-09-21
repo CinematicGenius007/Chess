@@ -47,12 +47,23 @@
 /*#blackPawn::before { content: 'P'; }*/
 
 /* This is for design */
-#chess-board {
-    height: 596px;
-    width: 596px;
+section#main {
+    min-width: 100%;
+    min-height: 100%;
     display: flex;
-    flex-flow: wrap-reverse;
-    border: 20px solid black;
+    justify-content: center;
+    align-items: center;
+}
+
+#chess-board {
+    max-height: 560px;
+    max-width: 560px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(8, 70px);
+    grid-template-rows: repeat(8, 70px);
+    box-shadow: 0 0 0 20px black;
 }
 
 .chess-tile-1:nth-child(2n) {
@@ -71,17 +82,17 @@
     background: slategray;
 }
 
-.chess-tile-1:nth-child(-n + 8) {
-    border-bottom: 4px solid black;
-}
+/*.chess-tile-1:nth-child(-n + 8) {*/
+/*    border-bottom: 4px solid black;*/
+/*}*/
 
-.chess-tile-2:nth-child(8n), .chess-tile-1:nth-child(8n) {
-    border-right: 4px solid black;
-}
+/*.chess-tile-2:nth-child(8n), .chess-tile-1:nth-child(8n) {*/
+/*    border-right: 4px solid black;*/
+/*}*/
 
 .chess-piece {
-    height: 70px;
-    width: 70px;
+    height: 100%;
+    width: 100%;
     font-size: 3.2rem;
     display: flex;
     justify-content: center;
@@ -93,10 +104,10 @@
     cursor: pointer;
 }
 
-.chess-piece {
-    border-left: 4px solid black;
-    border-top: 4px solid black;
-}
+/*.chess-piece {*/
+/*    border-left: 4px solid black;*/
+/*    border-top: 4px solid black;*/
+/*}*/
 
 .chess-piece-selected {
     box-shadow: inset 0 0 20px 8px black;
